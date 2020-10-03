@@ -39,11 +39,13 @@ impl GameState for State {
     }
 }
 
-fn main() -> rltk::BError {
+fn main() {
     use rltk::RltkBuilder;
     let context = RltkBuilder::simple80x50()
         .with_title("Roguelike Tutorial")
-        .build()?;
+        .build().unwrap();
+
+    // let context = Rltk::init_simple8x8(80, 50, "Hello RLTK World", "resources");
     let mut gs = State {
         ecs: World::new()
     };
@@ -66,5 +68,5 @@ fn main() -> rltk::BError {
         .with(Player{})
         .build();
 
-    rltk::main_loop(context, gs)
+    rltk::main_loop(context, gs);
 }
