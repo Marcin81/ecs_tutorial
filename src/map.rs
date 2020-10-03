@@ -51,17 +51,19 @@ fn apply_room_to_map(room : &Rect, map: &mut [TileType]) {
 }
 
 fn apply_horizontal_tunnel(map: &mut [TileType], x1:i32, x2:i32, y:i32) {
-    for x in min(x1,x2) ..= max(x1,x2) {
-        let idx = xy_idx(x, y);
-        if idx > 0 && idx < 80*50 {
-            map[idx as usize] = TileType::Floor;
-        }
-    }
+    apply_tunnel(map, x1, x2, y, |y, x| { xy_idx(x, y) });
 }
 
 fn apply_vertical_tunnel(map: &mut [TileType], y1:i32, y2:i32, x:i32) {
-    for y in min(y1,y2) ..= max(y1,y2) {
-        let idx = xy_idx(x, y);
+    apply_tunnel(map, y1, y2, x, |x, y| { xy_idx(x, y) });
+}
+
+fn apply_tunnel<F>(map: &mut [TileType], p1:i32, p2:i32, v:i32, f: F)
+where F: Fn(i32, i32) -> usize
+{
+    for cp in min(p1, p2) ..= max(p1, p2) {
+        let idx = f(v, cp);
+
         if idx > 0 && idx < 80*50 {
             map[idx as usize] = TileType::Floor;
         }
